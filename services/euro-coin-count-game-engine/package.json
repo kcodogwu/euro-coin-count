@@ -1,0 +1,36 @@
+{
+  "name": "euro-coin-count",
+  "version": "1.0.0",
+  "description": "Euro Coin Count is an application, to show case the microservice application pattern. Given an euro amount, a user will guess the minimum number of euro coins needed to make up that amount.",
+  "main": "index.js",
+  "module": "server.mjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kcodogwu/euro-coin-count.git"
+  },
+  "keywords": [
+    "euro",
+    "coin",
+    "count",
+    "microservice",
+    "docker",
+    "app"
+  ],
+  "author": "Kingson Chinedu Odogwu",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/kcodogwu/euro-coin-count/issues"
+  },
+  "homepage": "https://github.com/kcodogwu/euro-coin-count#readme",
+  "devDependencies": {
+    "eslint": "^4.14.0"
+  },
+  "dependencies": {
+    "@std/esm": "^0.18.0",
+    "dotenv": "4.0.0",
+    "express": "4.16.2"
+  }
+}
