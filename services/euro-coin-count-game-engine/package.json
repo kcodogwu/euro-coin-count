@@ -26,11 +26,16 @@
   },
   "homepage": "https://github.com/kcodogwu/euro-coin-count#readme",
   "devDependencies": {
-    "eslint": "^4.14.0"
+    "eslint": "^4.14.0",
+    "tape": "^4.8.0"
   },
   "dependencies": {
     "@std/esm": "^0.18.0",
+    "body-parser": "1.18.2",
+    "cors": "2.8.4",
     "dotenv": "4.0.0",
-    "express": "4.16.2"
+    "express": "4.16.2",
+    "helmet": "3.9.0",
+    "method-override": "2.3.10"
   }
 }

@@ -26,6 +26,8 @@
             "error",
             "always"
         ],
-        "no-console": "off"
+        "no-console": "warn",
+        "no-constant-condition": "warn",
+        "no-unused-vars": "warn"
     }
 }
