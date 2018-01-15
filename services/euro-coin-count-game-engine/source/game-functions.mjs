@@ -1,5 +1,23 @@
 'use strict';
 
+let difficultyLevel = 'normal';
+
+const setDifficultyLevel = value => {
+  //difficultyLevel = value;
+};
+
+const generateEuroAmount = () => {
+  // let euroAmount = 0.01;
+
+  // if (difficultyLevel === 'easy') {}
+};
+
+const sortAnswer = () => {};
+
+const checkAnswer = () => {};
+
+const givePoints = () => {};
+
 /**
  * Function to remove the currency symbols (€, c) at 
  * the beginning and the end of what the user supplied
@@ -86,4 +104,4 @@ const coinCounter = (value) => {
   return result; // result is returned
 };
 
-export { canonicalEquivalent };
+export { generateEuroAmount, sortAnswer, checkAnswer, givePoints };

@@ -5,7 +5,7 @@
   "main": "index.js",
   "module": "server.mjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/index.js"
   },
   "repository": {
     "type": "git",
@@ -27,6 +27,7 @@
   "homepage": "https://github.com/kcodogwu/euro-coin-count#readme",
   "devDependencies": {
     "eslint": "^4.14.0",
+    "supertest": "^3.0.0",
     "tape": "^4.8.0"
   },
   "dependencies": {

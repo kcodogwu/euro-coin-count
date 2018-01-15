@@ -9,6 +9,7 @@ import domain from 'domain';
 import methodOverride from 'method-override';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import * as routes from '../source/app-routes';
 
 // bring in environment settings
 dotenv.config();
@@ -53,13 +54,15 @@ app.use((req, res, next) => {
   dom.run(next);
 });
 
-app.use(helmet);
+app.use(helmet());
 app.use(methodOverride('X-HTTP-Method')); // Microsoft
 app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
 app.use(methodOverride('X-Method-Override')); // IBM
 app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-form-urlencoded
 app.use(bodyParser.json()); // parse application/json
 app.use(cors());
+
+routes.appRouter(app);
 
 server = http.createServer(app);
 

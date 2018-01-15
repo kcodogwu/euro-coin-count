@@ -1,2 +1,2 @@
 require = require('@std/esm')(module, true);
-module.exports = require('./server.mjs').default;
+module.exports = require('./test.mjs').default;

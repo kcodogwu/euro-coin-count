@@ -2,83 +2,178 @@
 
 // load modules
 import test from 'tape';
-import game from '..';
+import * as gameFunctions from '../source/game-functions';
 
-const errorMsg = `INVALID INPUT!
+test('Test amount generated is never less than 0.01', assert => {
+  let actual = false;
+  const expected = true;
 
-Please enter valid inputs like:  432, 213p, £16.23p, £14, £54.04, £23.33333, 001.41p,...`;
+  [1, 2, 3, 4, 5, 6, 7].map(() => {
+    actual = gameFunctions.generateEuroAmount() >= 0.01;
+  });
 
-test('Test the coin counting function', assert => {
   assert.equal(
-    game('13x'),
-    errorMsg,
-    'Given invalid input, should return a message that shows invalid input.'
+    actual,
+    expected,
+    'generateEuroAmount() should never produce a number less than 0.01'
   );
 
-  assert.equal(
-    game('13p.02'),
-    errorMsg,
-    'Given invalid input, should return a message that shows invalid input.'
-  );
+  assert.end();
+});
+
+test('Test amount generated within the "easy" range.', assert => {
+  let actual = false;
+  const expected = true;
+
+  [1, 2, 3, 4, 5, 6, 7].map(() => {
+    actual = gameFunctions.generateEuroAmount() <= 999.99;
+  });
 
   assert.equal(
-    game('£p'),
-    errorMsg,
-    'Given invalid input, should return a message that shows invalid input.'
+    actual,
+    expected,
+    'generateEuroAmount() should never produce a number greater than 999.99'
   );
 
-  assert.equal(
-    (game('432') !== errorMsg) && (game('432') !== undefined),
-    true,
-    'Given valid input, should not return a message that shows invalid input.'
-  );
+  assert.end();
+});
+
+test('Test amount generated within the "normal" range.', assert => {
+  let actual = false;
+  const expected = true;
+
+  [1, 2, 3, 4, 5, 6, 7].map(() => {
+    actual = gameFunctions.generateEuroAmount() <= 999999.99;
+  });
 
   assert.equal(
-    (game('213p') !== errorMsg) && (game('432') !== undefined),
-    true,
-    'Given valid input, should not return a message that shows invalid input.'
+    actual,
+    expected,
+    'generateEuroAmount() should never produce a number greater than 999999.99'
   );
 
-  assert.equal(
-    (game('£16.23p') !== errorMsg) && (game('432') !== undefined),
-    true,
-    'Given valid input, should not return a message that shows invalid input.'
-  );
+  assert.end();
+});
+
+test('Test amount generated within the "hard" range.', assert => {
+  let actual = false;
+  const expected = true;
+
+  [1, 2, 3, 4, 5, 6, 7].map(() => {
+    actual = gameFunctions.generateEuroAmount() <= 999999999.99;
+  });
 
   assert.equal(
-    (game('£14') !== errorMsg) && (game('432') !== undefined),
-    true,
-    'Given valid input, should not return a message that shows invalid input.'
+    actual,
+    expected,
+    'generateEuroAmount() should never produce a number greater than 999999999.99'
   );
 
-  assert.equal(
-    (game('£54.04') !== errorMsg) && (game('432') !== undefined),
-    true,
-    'Given valid input, should not return a message that shows invalid input.'
-  );
+  assert.end();
+});
+
+test('Test that answer supplied by the user can be sorted', assert => {
+  const actual = gameFunctions.sortAnswer([
+    { coin: '€2', count: 1 },
+    { coin: '2c', count: 1 },
+    { coin: '5c', count: 1 },
+    { coin: '10c', count: 1 },
+    { coin: '20c', count: 1 },
+    { coin: '50c', count: 1 },
+    { coin: '€1', count: 1 },
+    { coin: '1c', count: 1 }
+  ]);
+
+  const expected = [
+    { coin: '€2', count: 1 },
+    { coin: '€1', count: 1 },
+    { coin: '50c', count: 1 },
+    { coin: '20c', count: 1 },
+    { coin: '10c', count: 1 },
+    { coin: '5c', count: 1 },
+    { coin: '2c', count: 1 },
+    { coin: '1c', count: 1 }
+  ];
 
   assert.equal(
-    (game('£23.33333') !== errorMsg) && (game('432') !== undefined),
-    true,
-    'Given valid input, should not return a message that shows invalid input.'
+    actual,
+    expected,
+    'Answers supplied by the user should be sorted'
   );
 
-  assert.equal(
-    (game('001.41p') !== errorMsg) && (game('432') !== undefined),
-    true,
-    'Given valid input, should not return a message that shows invalid input.'
-  );
+  assert.end();
+});
+
+test('Test that the answer the user supplied and the expected answer can be properly compared', nested => {
+  nested.test('When the supplied answer is wrong', assert => {
+    const actual = gameFunctions.checkAnswer(
+      [{ coin: '€2', count: 2 }, { coin: '€1', count: 1 }],
+      [{ coin: '€2', count: 3 }, { coin: '€1', count: 1 }]
+    );
+  
+    const expected = 'wrong';
+
+    assert.equal(
+      actual,
+      expected,
+      'The result should be "wrong"'
+    );
+  
+    assert.end();
+  });
+
+  nested.test('When the supplied answer is right', assert => {
+    const actual = gameFunctions.checkAnswer(
+      [{ coin: '€2', count: 3 }, { coin: '€1', count: 1 }],
+      [{ coin: '€2', count: 3 }, { coin: '€1', count: 1 }]
+    );
+  
+    const expected = 'right';
+    
+    assert.equal(
+      actual,
+      expected,
+      'The result should be "right"'
+    );
+  
+    assert.end();
+  });
+});
+
+test('Test points allocation for getting the correct answer on 1st try', assert => {
+  const actual = gameFunctions.givePoints();
+  const expected = 3;
 
   assert.equal(
-    game('123p').join(', '),
-    '1 x £1, 1 x 20p, 1 x 2p, 1 x 1p',
-    'Given valid input, should return expectted breakdown, starting with the highest coin and then descending till total amount is achieved.'
+    actual,
+    expected,
+    'Gets 3 points for accurately getting the answer on first try'
   );
 
+  assert.end();
+});
+
+test('Test points allocation for getting the correct answer after 1st try', assert => {
+  const actual = gameFunctions.givePoints();
+  const expected = 2;
+
   assert.equal(
-    game('£12.34').join(', '),
-    '6 x £2, 1 x 20p, 1 x 10p, 2 x 2p',
-    'Given valid input, should return expectted breakdown, starting with the highest coin and then descending till total amount is achieved.'
+    actual,
+    expected,
+    'Gets 2 points for accurately getting the answer after first try'
+  );
+
+  assert.end();
+});
+
+test('Test points allocation for not getting the correct answer', assert => {
+  const actual = gameFunctions.givePoints();
+  const expected = 0;
+
+  assert.equal(
+    actual,
+    expected,
+    'Gets 0 points for not getting the answer'
   );
 
   assert.end();
