@@ -1,5 +1,5 @@
 {
-  "name": "euro-coin-count-game-engine",
+  "name": "euro-coin-count-leader-board",
   "version": "1.0.0",
   "description": "Euro Coin Count is an application, to show case the microservice application pattern. Given an euro amount, a user will guess the minimum number of euro coins needed to make up that amount.",
   "main": "source/index.js",
@@ -26,19 +26,5 @@
   "bugs": {
     "url": "https://github.com/kcodogwu/euro-coin-count/issues"
   },
-  "homepage": "https://github.com/kcodogwu/euro-coin-count#readme",
-  "devDependencies": {
-    "eslint": "^4.14.0",
-    "supertest": "^3.0.0",
-    "tape": "^4.8.0"
-  },
-  "dependencies": {
-    "@std/esm": "^0.18.0",
-    "body-parser": "1.18.2",
-    "cors": "2.8.4",
-    "dotenv": "4.0.0",
-    "express": "4.16.2",
-    "helmet": "3.9.0",
-    "method-override": "2.3.10"
-  }
+  "homepage": "https://github.com/kcodogwu/euro-coin-count#readme"
 }
