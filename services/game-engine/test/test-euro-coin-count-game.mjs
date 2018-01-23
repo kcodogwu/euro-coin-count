@@ -7,9 +7,24 @@ import * as gameFunctions from '../source/game-functions';
 test('Test amount generated is never less than 0.01', assert => {
   let actual = false;
   const expected = true;
+  const user = gameFunctions.createUser();
+
+  gameFunctions.setDifficultyLevel(user, 'easy');
 
   [1, 2, 3, 4, 5, 6, 7].map(() => {
-    actual = gameFunctions.generateEuroAmount() >= 0.01;
+    actual = gameFunctions.generateEuroAmount(user) >= 0.01;
+  });
+
+  gameFunctions.setDifficultyLevel(user, 'normal');
+
+  [1, 2, 3, 4, 5, 6, 7].map(() => {
+    actual = gameFunctions.generateEuroAmount(user) >= 0.01;
+  });
+
+  gameFunctions.setDifficultyLevel(user, 'hard');
+
+  [1, 2, 3, 4, 5, 6, 7].map(() => {
+    actual = gameFunctions.generateEuroAmount(user) >= 0.01;
   });
 
   assert.equal(
@@ -22,11 +37,16 @@ test('Test amount generated is never less than 0.01', assert => {
 });
 
 test('Test amount generated within the "easy" range.', assert => {
+  let amount = 0;
   let actual = false;
   const expected = true;
+  const user = gameFunctions.createUser();
+
+  gameFunctions.setDifficultyLevel(user, 'easy');
+  amount = gameFunctions.generateEuroAmount(user);
 
   [1, 2, 3, 4, 5, 6, 7].map(() => {
-    actual = gameFunctions.generateEuroAmount() <= 999.99;
+    actual = amount >= 0.01 && amount <= 999.99;
   });
 
   assert.equal(
@@ -39,11 +59,16 @@ test('Test amount generated within the "easy" range.', assert => {
 });
 
 test('Test amount generated within the "normal" range.', assert => {
+  let amount = 0;
   let actual = false;
   const expected = true;
+  const user = gameFunctions.createUser();
+
+  gameFunctions.setDifficultyLevel(user, 'normal');
+  amount = gameFunctions.generateEuroAmount(user);
 
   [1, 2, 3, 4, 5, 6, 7].map(() => {
-    actual = gameFunctions.generateEuroAmount() <= 999999.99;
+    actual = amount >= 0.01 && amount <= 999999.99;
   });
 
   assert.equal(
@@ -56,11 +81,16 @@ test('Test amount generated within the "normal" range.', assert => {
 });
 
 test('Test amount generated within the "hard" range.', assert => {
+  let amount = 0;
   let actual = false;
   const expected = true;
+  const user = gameFunctions.createUser();
+
+  gameFunctions.setDifficultyLevel(user, 'hard');
+  amount = gameFunctions.generateEuroAmount(user);
 
   [1, 2, 3, 4, 5, 6, 7].map(() => {
-    actual = gameFunctions.generateEuroAmount() <= 999999999.99;
+    actual = amount >= 0.01 && amount <= 999999999.99;
   });
 
   assert.equal(
@@ -95,7 +125,7 @@ test('Test that answer supplied by the user can be sorted', assert => {
     { coin: '1c', count: 1 }
   ];
 
-  assert.equal(
+  assert.deepEqual(
     actual,
     expected,
     'Answers supplied by the user should be sorted'

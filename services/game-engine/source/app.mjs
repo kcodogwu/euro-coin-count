@@ -9,6 +9,7 @@ import domain from 'domain';
 import methodOverride from 'method-override';
 import bodyParser from 'body-parser';
 import cors from 'cors';
+import path from 'path';
 import * as routes from '../source/app-routes';
 
 // bring in environment settings
@@ -55,6 +56,7 @@ app.use((req, res, next) => {
 });
 
 app.use(helmet());
+app.use(express.static(path.resolve('./source/assets')));
 app.use(methodOverride('X-HTTP-Method')); // Microsoft
 app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
 app.use(methodOverride('X-Method-Override')); // IBM

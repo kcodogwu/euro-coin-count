@@ -3,8 +3,8 @@
 import * as appHanders from './app-handlers';
 
 const appRouter = app => {
-  //app.post('/difficulty-level', appHanders.index);
-  //app.post('/game', appHanders.index);
+  app.get('/difficulty-level', appHanders.difficulty_level);
+  app.get('/game', appHanders.game);
 };
 
 export { appRouter };

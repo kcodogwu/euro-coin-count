@@ -2,9 +2,10 @@
   "name": "euro-coin-count",
   "version": "1.0.0",
   "description": "Euro Coin Count is an application, to show case the microservice application pattern. Given an euro amount, a user will guess the minimum number of euro coins needed to make up that amount.",
-  "main": "index.js",
-  "module": "server.mjs",
+  "main": "source/index.js",
+  "module": "source/server.mjs",
   "scripts": {
+    "start": "node source/index.js",
     "test": "node test/index.js"
   },
   "repository": {
