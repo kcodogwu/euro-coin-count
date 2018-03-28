@@ -1,5 +1,7 @@
 'use strict';
 
+import * as gameFunctions from './game-functions';
+
 const htmlString = (title, content) => `
 <!DOCTYPE html>
 <html>
@@ -28,7 +30,6 @@ const htmlString = (title, content) => `
       </div>
     </div>
   </div>
-  <script src="/scripts/main.js"></script>
 </body>
 </html>
 `;
@@ -53,7 +54,7 @@ const game = (req, res) => {
     .send(htmlString('', `
       <form id="coin-count-form"  action="#">
         <label>What's the breakdown for:</label>
-        <div class="euro-amount center-text">€500.04</div>
+        <div class="euro-amount center-text">${ gameFunctions.formatEuroAmount(gameFunctions.generateEuroAmount({ difficultyLevel: 'easy', firstTry: false })) }</div>
         <div id="result">
           <div class="result-child">
             <span class="">
@@ -70,29 +71,12 @@ const game = (req, res) => {
                 <option value="1c">1c</option>
               </select>
             </span>
-            <!--<button class="remove">-</button>-->
-          </div>
-          <div class="result-child">
-            <span class="">
-              <input type="number" class="" name="coinCount2" />
-              x
-              <select name="coinLabel2">
-                <option value="€2">€2</option>
-                <option value="€1">€1</option>
-                <option value="50c">50c</option>
-                <option value="20c">20c</option>
-                <option value="10c">10c</option>
-                <option value="5c">5c</option>
-                <option value="2c">2c</option>
-                <option value="1c">1c</option>
-              </select>
-            </span>
-            <button class="remove">-</button>
           </div>
         </div>
         <button class="add">+</button>
         <input value="Submit answer" name="submitButton" type="submit" />
       </form>
+      <script src="/scripts/game.js"></script>
     `))
   ;
 };

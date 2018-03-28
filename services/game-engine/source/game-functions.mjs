@@ -72,17 +72,18 @@ const sortAnswer = (arr = []) => {
  * @param {String} value - input value supplied by the user
  */
 const removeCurrencySymbol = (value) => {
+  let result = value;
   // gets rid of 'c' at the end if any
-  if (value.substr(value.length - 1, 1) === 'c') {
-    value = value.substr(0, value.length - 1);
+  if (value.toString().substr(value.toString().length - 1, 1) === 'c') {
+    result = Number(value.toString().substr(0, value.toString().length - 1));
   }
 
   // gets rid of '€' at the beginning if any
-  if (value.substr(0, 1) === '€') {
-    value = value.substr(1, value.length - 1);
+  if (value.toString().substr(0, 1) === '€') {
+    result = Number(value.toString().substr(1, value.toString().length - 1));
   }
 
-  return value;
+  return result * 100;
 };
 
 /**
@@ -96,7 +97,7 @@ const canonicalEquivalent = (value) => {
   let beforeDecimalPoint = '';
   let afterDecimalPoint = '';
 
-  strArr = num.split('.');
+  strArr = num.toString().split('.');
   beforeDecimalPoint = strArr[0]; // value before decimal place
   afterDecimalPoint = strArr[1] === undefined ? '' : strArr[1]; // value after decimal place, if there's any
   
@@ -153,7 +154,7 @@ const coinCounter = (value) => {
 const checkAnswer = (user, userAnswer = [{ coin: '', count: 0 }], euroAmount) => {
   const expectedAnswer = coinCounter(euroAmount);
   let isCorrect = true;
-  
+
   if (userAnswer.length === expectedAnswer.length) {
     userAnswer.map((element, i) => {
       if (element.coin !== expectedAnswer[i].coin || element.count !== expectedAnswer[i].count) {

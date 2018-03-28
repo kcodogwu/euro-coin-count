@@ -136,34 +136,44 @@ test('Test that answer supplied by the user can be sorted', assert => {
 
 test('Test that the answer the user supplied and the expected answer can be properly compared', nested => {
   nested.test('When the supplied answer is wrong', assert => {
-    const actual = gameFunctions.checkAnswer(
-      [{ coin: '€2', count: 2 }, { coin: '€1', count: 1 }],
-      [{ coin: '€2', count: 3 }, { coin: '€1', count: 1 }]
-    );
-  
-    const expected = 'wrong';
+    let actual = '';
+    const expected = false;
+    const user = gameFunctions.createUser();
 
+    user.firstTry = false;
+
+    actual = gameFunctions.checkAnswer(
+      user,
+      [{ coin: '€2', count: 2 }, { coin: '€1', count: 1 }],
+      '€7.00'
+    );
+    
     assert.equal(
       actual,
       expected,
-      'The result should be "wrong"'
+      'The result should be false'
     );
   
     assert.end();
   });
 
   nested.test('When the supplied answer is right', assert => {
-    const actual = gameFunctions.checkAnswer(
+    let actual = '';
+    const expected = true;
+    const user = gameFunctions.createUser();
+
+    user.firstTry = false;
+
+    actual = gameFunctions.checkAnswer(
+      user,
       [{ coin: '€2', count: 3 }, { coin: '€1', count: 1 }],
-      [{ coin: '€2', count: 3 }, { coin: '€1', count: 1 }]
+      '€7.00'
     );
-  
-    const expected = 'right';
     
     assert.equal(
       actual,
       expected,
-      'The result should be "right"'
+      'The result should be true'
     );
   
     assert.end();
