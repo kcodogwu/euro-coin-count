@@ -1,9 +1,8 @@
 {
-  "name": "euro-coin-count-user-management",
+  "name": "euro-coin-count-api-gateway",
   "version": "1.0.0",
   "description": "Euro Coin Count is an application, to show case the microservice application pattern. Given an euro amount, a user will guess the minimum number of euro coins needed to make up that amount.",
   "main": "source/index.js",
-  "module": "source/server.mjs",
   "scripts": {
     "start": "node source/index.js"
   },
@@ -26,23 +25,21 @@
     "url": "https://github.com/kcodogwu/euro-coin-count/issues"
   },
   "homepage": "https://github.com/kcodogwu/euro-coin-count#readme",
-  "devDependencies": {
-    "eslint": "^4.14.0",
-    "supertest": "^3.0.0",
-    "tape": "^4.8.0"
-  },
   "dependencies": {
-    "@std/esm": "^0.18.0",
     "body-parser": "1.18.2",
     "cors": "2.8.4",
     "credential": "2.0.0",
-    "dotenv": "4.0.0",
-    "express": "4.16.2",
+    "dotenv": "5.0.1",
+    "express": "4.16.3",
+    "express-http-proxy": "1.1.0",
     "express-session": "1.15.6",
-    "helmet": "3.9.0",
+    "helmet": "3.12.0",
     "method-override": "2.3.10",
     "passport": "0.4.0",
     "passport-local": "1.0.0",
     "redis": "2.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1"
   }
 }

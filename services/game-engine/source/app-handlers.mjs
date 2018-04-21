@@ -34,10 +34,10 @@ const htmlString = (title, content) => `
 </html>
 `;
 
-const difficulty_level = (req, res) => {
+const difficultyLevel = (req, res) => {
   res
     .status(200)
-    .send(htmlString('', `
+    .send(htmlString('Difficulty Level', `
       <h2 class="center-text">Select difficulty level<h2>
       <form id="coin-count-form" action="#">
         <button type="submit" name="easy">Easy</button>
@@ -81,4 +81,4 @@ const game = (req, res) => {
   ;
 };
 
-export { difficulty_level, game };
+export { difficultyLevel, game };

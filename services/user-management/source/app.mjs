@@ -4,19 +4,22 @@
 import http from 'http';
 import dotenv from 'dotenv';
 import express from 'express';
+import session from 'express-session';
 import helmet from 'helmet';
 import domain from 'domain';
 import methodOverride from 'method-override';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import path from 'path';
+import passport from 'passport';
+import { redisClient } from './app-db-access';
 import * as routes from '../source/app-routes';
 
 // bring in environment settings
 dotenv.config();
 
 const app = express();
-const { HOST, PORT } = process.env;
+const { HOST, PORT, SECRET } = process.env;
 let server;
 
 app.disable('x-powered-by');
@@ -57,6 +60,15 @@ app.use((req, res, next) => {
 
 app.use(helmet());
 app.use(express.static(path.resolve('./source/assets')));
+
+app.use(session({ 
+  secret: SECRET,
+  resave: false,
+  saveUninitialized: true, 
+}));
+
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(methodOverride('X-HTTP-Method')); // Microsoft
 app.use(methodOverride('X-HTTP-Method-Override')); // Google/GData
 app.use(methodOverride('X-Method-Override')); // IBM
@@ -64,7 +76,17 @@ app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-
 app.use(bodyParser.json()); // parse application/json
 app.use(cors());
 
-routes.appRouter(app);
+routes.appRouter(app, passport);
+
+passport.serializeUser((user, callback) => {
+  callback(null, user);
+});
+
+passport.deserializeUser((user, callback) => {
+  redisClient.hgetall('user:' + user, (err, reply) => {
+    callback(err, reply);
+  });
+});
 
 server = http.createServer(app);
 
