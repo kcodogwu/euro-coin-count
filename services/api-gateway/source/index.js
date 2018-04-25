@@ -15,15 +15,17 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const credential = require('credential');
 const redisClient = require('redis').createClient({ host: '172.17.0.1', port: 6379 });
+const jwt = require('jsonwebtoken');
 
 // bring in environment settings
 dotenv.config();
 
+let token = null;
 const app = express();
 const { HOST, PORT, SECRET } = process.env;
-const userManagementServiceProxy = httpProxy('http://localhost:9002');
-const gameEngineServiceProxy = httpProxy('http://localhost:9003');
-const leaderboardServiceProxy = httpProxy('http://localhost:9004');
+const userManagementServiceProxy = httpProxy('http://172.17.0.1:9002');
+const gameEngineServiceProxy = httpProxy('http://172.17.0.1:9003');
+const leaderboardServiceProxy = httpProxy('http://172.17.0.1:9004');
 
 const htmlString = (title, content) => `
 <!DOCTYPE html>
@@ -59,7 +61,6 @@ const htmlString = (title, content) => `
 
 redisClient.on('connect', () => console.log('Connected to the database'));
 redisClient.on('error', err => console.log('ERROR: ' + err));
-//redisClient.auth('pocket_builder_language_customers');
 app.disable('x-powered-by');
 app.set('host', HOST);
 app.set('port', PORT);
@@ -81,9 +82,18 @@ app.use(bodyParser.urlencoded({ extended: false })); // parse application/x-www-
 app.use(bodyParser.json()); // parse application/json
 app.use(cors());
 
+app.use('/users', (req, res, next) => {
+  userManagementServiceProxy(req, res, next);
+});
+
+app.use('/game', (req, res, next) => {
+  gameEngineServiceProxy(req, res, next);
+});
+
 // routes
 passport.use(new LocalStrategy(
   (username, password, done) => {
+
     redisClient.hgetall('user:' + username, (err, user) => {
       if (err) {
         return done(err);
@@ -101,6 +111,8 @@ passport.use(new LocalStrategy(
         if (!isValid) {
           return done(null, false);
         }
+
+        token = jwt.sign({ payload: username }, 'creatures bits white next', { expiresIn: 86400 });
 
         return done(null, user);
       });
@@ -120,7 +132,7 @@ app.get('/', (req, res) => {
         <input type="password" id="password" name="password" required />
         <button type="submit" id="log-in" name="logIn">Log in</button>
         <br />
-        <span>Don't have an account? Then <a href="/sign-up">sign up</a>.</span>
+        <span>Don't have an account? Then <a href="/users/sign-up">sign up</a>.</span>
       </form>
       <script src="/scripts/log-in.js"></script>
     `))
@@ -139,28 +151,18 @@ app.get('/log-in', (req, res) => {
         <input type="password" id="password" name="password" required />
         <button type="submit" id="log-in" name="logIn">Log in</button>
         <br />
-        <span>Don't have an account? Then <a href="/sign-up">sign up</a>.</span>
+        <span>Don't have an account? Then <a href="/users/sign-up">sign up</a>.</span>
       </form>
       <script src="/scripts/log-in.js"></script>
     `))
   ;
 });
 
-app.get('/users/*', (req, res, next) => {
-  userManagementServiceProxy(req, res, next);
-});
-
-app.get('/game/*', (req, res, next) => {
-  gameEngineServiceProxy(req, res, next);
-});
-
 app.post('/post-log-in',  passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
   redisClient.hgetall('user:' + req.body.username, (err, user) => {
-    req.session.username = req.body.username;
-    req.session.fullName = user.fullName;
-    req.session.difficultyLevel = user.difficultyLevel;
-    req.session.score = user.score;
-    res.redirect('/users/dashboard');
+    if (user) {
+      res.redirect('/users/dashboard/' + req.body.username + '?id=' + token);
+    }
   });
 });
 

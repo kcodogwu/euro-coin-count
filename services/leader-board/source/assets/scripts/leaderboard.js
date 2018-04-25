@@ -28,6 +28,19 @@ const lib = {
     if (el.classList) el.classList.remove(className);
     else el.className = el.className.replace(new RegExp('\\b'+ className+'\\b', 'g'), '');
   },
+  getAjax(url, success) {
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('GET', url);
+
+    xhr.onreadystatechange = function() {
+      if (xhr.readyState>3 && xhr.status==200) { success(xhr.responseText); }
+    };
+
+    xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xhr.send();
+    return xhr;
+  },
   postAjax(url, data, success) {
     const params = typeof data == 'string' ? data : Object.keys(data).map(k => { 
       return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
@@ -48,19 +61,42 @@ const lib = {
   }
 };
 
-// window.onload = () => {
-//   const fullName = lib.select('#full-name');
-//   const username = lib.select('#username');
-//   const password = lib.select('#password');
-//   const signUpButton = lib.select('#sign-up');
+window.onload = () => {
 
-//   const signUpButtonHandler = (e) => {
-//     e.preventDefault();
+  lib.getAjax(window.location.protocol + '//' + window.location.host + '/leaderboard/data', (data) => {
+    if (!data) {
+      return;
+    }
 
-//     lib.postAjax('/post-sign-up', { fullName: fullName.value, username: username.value, password: password.value }, () => {
-//       console.log('Here!');
-//     });
-//   };
+    const obj = JSON.parse(data);
+    const leaderBoardDiv = lib.select('.leaderboard');
+    let i = 0;
+    let html = leaderBoardDiv.innerHTML;
+    
+    if (obj.length <= 0) {
+      return;
+    }
 
-//   lib.addEvent(signUpButton, 'click', signUpButtonHandler);
+    obj.sort((a, b) => {
+      if (a.score < b.score) {
+        return 1;
+      } else if (a.score > b.score) {
+        return -1;
+      } else {
+        return 0; 
+      }
+    });
+    
+    obj.map((el, idx) => {
+      html += `
+        <div>
+          <div>${ idx + 1 }&nbsp;</div>
+          <div>${ el.user }</div>
+          <div>${ el.score }</div>
+        </div>
+      `;
+    });
+
+    leaderBoardDiv.innerHTML = html;
+  });
 };

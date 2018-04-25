@@ -48,19 +48,17 @@ const lib = {
   }
 };
 
-// window.onload = () => {
-//   const fullName = lib.select('#full-name');
-//   const username = lib.select('#username');
-//   const password = lib.select('#password');
-//   const signUpButton = lib.select('#sign-up');
+window.onload = () => {
+  // const username = lib.select('#username');
+  // const password = lib.select('#password');
+  // const logInButton = lib.select('#log-in');
 
-//   const signUpButtonHandler = (e) => {
-//     e.preventDefault();
+  // const logInButtonHandler = (e) => {
+  //   e.preventDefault();
 
-//     lib.postAjax('/post-sign-up', { fullName: fullName.value, username: username.value, password: password.value }, () => {
-//       console.log('Here!');
-//     });
-//   };
+  //   lib.postAjax('/post-log-in', { username: username.value, password: password.value }, () => {
+  //   });
+  // };
 
-//   lib.addEvent(signUpButton, 'click', signUpButtonHandler);
+  // lib.addEvent(logInButton, 'click', logInButtonHandler);
 };

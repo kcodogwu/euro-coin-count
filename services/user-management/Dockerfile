@@ -18,7 +18,7 @@ COPY . .
 EXPOSE 9002
 
 # port for connecting to redis-server
-EXPOSE 6379
+# EXPOSE 6379
 
 # npm start command
 CMD ["npm", "start"]

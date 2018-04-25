@@ -33,8 +33,7 @@ const lib = {
 window.onload = () => {
   const addButton = lib.select('.add');
   const resultDiv = lib.select('#result');
-  let removeButton;
-  let html = '';
+  let rb = null;
   let i = 1;
 
   const removeButtonHandler = (e) => {
@@ -60,6 +59,8 @@ window.onload = () => {
     const c5Option = document.createElement('option');
     const c2Option = document.createElement('option');
     const c1Option = document.createElement('option');
+    const timesX = document.createTextNode('\n x \n');
+    const removeButton = document.createElement('button');
 
     ++i;
     lib.addClass(resultChildDiv, 'result-child');
@@ -67,34 +68,32 @@ window.onload = () => {
     countCoinsInput.setAttribute('name', 'coinCount' + i);
     coinLabelSelect.setAttribute('name', 'coinLabel' + i);
     e2Option.setAttribute('value', '€2');
-    //e2Option.innerText = 
-
-    html= resultDiv.innerHTML;
-
-    html += `
-      <div class="result-child">
-        <span class="">
-          <input type="number" class="" name="coinCount${ i }" />
-          x
-          <select name="coinLabel${ i }">
-            <option value="€2">€2</option>
-            <option value="€1">€1</option>
-            <option value="50c">50c</option>
-            <option value="20c">20c</option>
-            <option value="10c">10c</option>
-            <option value="5c">5c</option>
-            <option value="2c">2c</option>
-            <option value="1c">1c</option>
-          </select>
-        </span>
-        <button class="remove">-</button>
-      </div>
-    `;
-
-    resultDiv.innerHTML = html;
-    removeButton = document.querySelectorAll('.remove');
+    e1Option.setAttribute('value', '€1');
+    c50Option.setAttribute('value', '50c');
+    c20Option.setAttribute('value', '20c');
+    c10Option.setAttribute('value', '10c');
+    c5Option.setAttribute('value', '5c');
+    c2Option.setAttribute('value', '2c');
+    c1Option.setAttribute('value', '1c');
+    removeButton.setAttribute('class', 'remove');
+    removeButton.innerText = '-';
+    coinLabelSelect.appendChild(e2Option);
+    coinLabelSelect.appendChild(e1Option);
+    coinLabelSelect.appendChild(c50Option);
+    coinLabelSelect.appendChild(c20Option);
+    coinLabelSelect.appendChild(c10Option);
+    coinLabelSelect.appendChild(c5Option);
+    coinLabelSelect.appendChild(c2Option);
+    coinLabelSelect.appendChild(c1Option);
+    span.appendChild(countCoinsInput);
+    span.appendChild(timesX);
+    span.appendChild(coinLabelSelect);
+    resultChildDiv.appendChild(span);
+    resultChildDiv.appendChild(removeButton);
+    resultDiv.appendChild(resultChildDiv);
+    rb = document.querySelectorAll('.remove');
     
-    [].map.call(removeButton, (el) => {
+    [].map.call(rb, (el) => {
       lib.addEvent(el, 'click', removeButtonHandler);
     });
   });

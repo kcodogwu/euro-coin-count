@@ -1,14 +1,14 @@
 'use strict';
 
 const createUser = () => {
-  return { difficultyLevel: 'normal', firstTry: false };
+  return { difficultyLevel: 'normal', firstTry: 0 };
 };
 
 const setDifficultyLevel = (user, value) => {
   user.difficultyLevel = value;
 };
 
-const generateEuroAmount = (user = { difficultyLevel: '', firstTry: false }) => {
+const generateEuroAmount = (user = { difficultyLevel: '', firstTry: 0 }) => {
   let endpoint = 0;
   let amount = 0.01;
   
@@ -24,7 +24,7 @@ const generateEuroAmount = (user = { difficultyLevel: '', firstTry: false }) => 
 
   amount = Math.floor(Math.random() * (endpoint - 0.01 + 1)) + 0.01;
   amount = Number(Math.round(Number(amount + 'e2')) + 'e-2').toFixed(2);
-  user.firstTry = true;
+  user.firstTry = 1;
 
   return amount;
 };
@@ -159,21 +159,21 @@ const checkAnswer = (user, userAnswer = [{ coin: '', count: 0 }], euroAmount) =>
     userAnswer.map((element, i) => {
       if (element.coin !== expectedAnswer[i].coin || element.count !== expectedAnswer[i].count) {
         isCorrect = false;
-        if (user.firstTry) user.firstTry = false;
+        if (user.firstTry === 1) user.firstTry = 0;
       }
     });
   } else {
     isCorrect = false;
-    if (user.firstTry) user.firstTry = false;
+    if (user.firstTry === 1) user.firstTry = 0;
   }
 
   return isCorrect;
 };
 
 const givePoints = (user, isCorrect) => {
-  if (isCorrect && user.firstTry)
+  if (isCorrect && user.firstTry === 1)
     user.points += 3
-  ; else if (isCorrect && !(user.firstTry))
+  ; else if (isCorrect && user.firstTry === 0)
     user.points += 2
   ;
 };
