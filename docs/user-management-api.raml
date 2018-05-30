@@ -1,0 +1,46 @@
+#%RAML 1.0
+---
+title: User Management
+baseUri: /users
+version: 1
+
+/sign-up:
+  get:
+    description: Retrieve sign-up page for creating a new player (user)
+    responses:
+      200:
+        body:
+          text/html:
+
+/post-sign-up:
+  post:
+    body:
+      application/x-www-form-urlencoded:
+        type: object
+        properties: 
+          fullName: string
+          username: string
+          password: string
+    responses: 
+      303:
+        description: Redirects to /users/dashboard/{ username }?token=ACCESS TOKEN
+
+
+/dashboard:
+  /{ username }:
+    get:
+      description: Retrieve login page for the user to supply login credentials
+      queryParameters:
+        token:
+          type: string
+          description: JSON Web Token assigned to authorized user giving permission to make call
+          required: true
+      responses:
+        200:
+          body:
+            text/html:
+        403:
+          description: Refused response to call because no token is provided
+          body: 
+            text/plain:
+        

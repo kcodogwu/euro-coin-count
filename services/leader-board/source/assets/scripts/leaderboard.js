@@ -62,7 +62,6 @@ const lib = {
 };
 
 window.onload = () => {
-
   lib.getAjax(window.location.protocol + '//' + window.location.host + '/leaderboard/data', (data) => {
     if (!data) {
       return;
@@ -70,7 +69,6 @@ window.onload = () => {
 
     const obj = JSON.parse(data);
     const leaderBoardDiv = lib.select('.leaderboard');
-    let i = 0;
     let html = leaderBoardDiv.innerHTML;
     
     if (obj.length <= 0) {
@@ -89,10 +87,10 @@ window.onload = () => {
     
     obj.map((el, idx) => {
       html += `
-        <div>
-          <div>${ idx + 1 }&nbsp;</div>
-          <div>${ el.user }</div>
-          <div>${ el.score }</div>
+        <div class="rankrow">
+          <div class="rankitem">${ idx + 1 }&nbsp;</div>
+          <div class="rankitem">${ el.user }</div>
+          <div class="rankitem">${ el.score }</div>
         </div>
       `;
     });

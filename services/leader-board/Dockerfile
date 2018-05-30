@@ -15,7 +15,7 @@ RUN npm install
 COPY . .
 
 # port for node app
-EXPOSE 9003
+EXPOSE 9004
 
 # port for connecting to redis-server
 # EXPOSE 6379

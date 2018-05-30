@@ -1,0 +1,43 @@
+#%RAML 1.0
+---
+title: Access Control
+baseUri: /
+version: 1
+
+/:
+  get:
+    description: Retrieve login page for the user to supply login credentials
+    queryParameters:
+      a:
+        type: string
+        description: States if access granted
+        required: false
+    responses:
+      200:
+        body:
+          text/html:
+
+/log-in:
+  get:
+    description: Retrieve login page for the user to supply login credentials
+    queryParameters:
+      a:
+        type: string
+        description: States if access granted
+        required: false
+    responses:
+      200:
+        body:
+          text/html:
+
+/post-log-in:
+  post:
+    body:
+      application/x-www-form-urlencoded:
+        type: object
+        properties: 
+          username: string
+          password: string
+    responses: 
+      303:
+        description: If valid user credentials are supplied redirects to /users/dashboard/{ username }?token=ACCESS TOKEN, otherwise redirect back to /

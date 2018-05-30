@@ -5,7 +5,6 @@ const http = require('http');
 const dotenv = require('dotenv');
 const express = require('express');
 const methodOverride = require('method-override');
-const httpProxy = require('express-http-proxy');
 const session = require('express-session');
 const helmet = require('helmet');
 const bodyParser = require('body-parser');
@@ -43,21 +42,25 @@ const htmlString = (title, content, l) => `
 <body>
   <div id="mySidenav" class="sidenav">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-    <a href="#">Log out</a>
+    <a href="/log-out">Log out</a>
     <a href="/users/dashboard/${ l && l.username }?id=${ l && l.token }">My profile</a>
     <a href="/game/play/${ l && l.username }?id=${ l && l.token }">Play</a>
     <a href="/game/instructions/${ l && l.username }?id=${ l && l.token }">Instructions</a>
     <a href="/game/difficulty-level/${ l && l.username }?id=${ l && l.token }">Difficulty</a>
+    <a href="/leaderboard/index/${ l && l.username }?id=${ l && l.token }">Leaderboard</a>
   </div>
   <div id="page">
     <div id="wrapper">
-      <header><h1>Euro Coin Count</h1></header>
-      <div onclick="openNav()">MENU</div>
+      <header>
+        <h1>Euro Coin Count</h1>
+        <div onclick="openNav()">MENU</div>
+      </header>
       <div id="content">
         ${ content }
       </div>
     </div>
   </div>
+  <script src="/leaderboard/scripts/menu.js"></script>
 </body>
 </html>
 `;
@@ -131,8 +134,13 @@ app.get('/index/:username', validateToken, (req, res) => {
   res
     .status(200)
     .send(htmlString('Leaderboard', `
-      <h2 class="center-text">Leaderboard<h2>
+      <h2 class="center-text">Leaderboard</h2>
       <div class="leaderboard">
+        <div class="rankrow">
+          <div class="rankitem">Rank</div>
+          <div class="rankitem">User</div>
+          <div class="rankitem">Score</div>
+        </div>
       </div>
       <script src="/leaderboard/scripts/leaderboard.js"></script>
     `, req.session))
@@ -141,6 +149,12 @@ app.get('/index/:username', validateToken, (req, res) => {
 
 app.get('/data', (req, res) => {
   let result = [];
+
+  const returnJSON = (item) => {
+    if (item.length === result.length) {
+      res.json(result);
+    }
+  };
 
   redisClient.keys('user*', (err, reply) => {
     if (err) {
@@ -152,20 +166,17 @@ app.get('/data', (req, res) => {
         if (err) {
           return;
         }
-
-        result.push({ user: key.replace('user:', ''), score: Number(rep) });
+        
+        result = result.concat({ user: key.replace('user:', ''), score: Number(rep) });
+        returnJSON(reply);
       });
     });
-
-    res.json(result);
   });
-  
 });
 
 const startServer = () => {
   http.createServer(app).listen(app.get('port'), app.get('host'), (err) => {
     if (err) {
-      console.log(err);
       return;
     }
 

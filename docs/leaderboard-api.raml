@@ -1,0 +1,23 @@
+#%RAML 1.0
+---
+title: Leaderboard
+baseUri: /leaderboard
+version: 1
+
+/index:
+  /{ username }:
+    get:
+      description: Retrieve page that shows the ranking of all players of the game
+      queryParameters:
+        token:
+          type: string
+          description: JSON Web Token assigned to authorized user giving permission to make call
+          required: true
+      responses:
+        200:
+          body:
+            text/html:
+        403:
+          description: Refused response to call because no token is provided
+          body: 
+            text/plain:

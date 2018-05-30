@@ -90,6 +90,10 @@ app.use('/game', (req, res, next) => {
   gameEngineServiceProxy(req, res, next);
 });
 
+app.use('/leaderboard', (req, res, next) => {
+  leaderboardServiceProxy(req, res, next);
+});
+
 // routes
 passport.use(new LocalStrategy(
   (username, password, done) => {
@@ -121,10 +125,18 @@ passport.use(new LocalStrategy(
 ));
 
 app.get('/', (req, res) => {
+  const a = req.query.a;
+  let extraClass = '';
+
+  if (a === 'no') {
+    extraClass = 'no-access-visible';
+  }
+
   res
     .status(200)
     .send(htmlString('Log in', `
       <h2 class="center-text">Log in<h2>
+      <div class="no-access ${ extraClass }">Log in attempt failed. Please supply a correct username and password</div>
       <form id="log-in-form" action="/post-log-in" method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required />
@@ -140,10 +152,18 @@ app.get('/', (req, res) => {
 });
 
 app.get('/log-in', (req, res) => {
+  const a = req.query.a;
+  let extraClass = '';
+
+  if (a === 'no') {
+    extraClass = 'no-access-visible';
+  }
+  
   res
     .status(200)
     .send(htmlString('Log in', `
       <h2 class="center-text">Log in<h2>
+      <div class="no-access ${ extraClass }">Log in attempt failed. Please supply a correct username and password</div>
       <form id="log-in-form" action="/post-log-in" method="POST">
         <label for="username">Username:</label>
         <input type="text" id="username" name="username" required />
@@ -158,7 +178,12 @@ app.get('/log-in', (req, res) => {
   ;
 });
 
-app.post('/post-log-in',  passport.authenticate('local', { failureRedirect: '/' }), (req, res) => {
+app.get('/log-out', (req, res) => {
+  req.logout();
+  res.redirect('/');
+});
+
+app.post('/post-log-in',  passport.authenticate('local', { failureRedirect: '/?a=no' }), (req, res) => {
   redisClient.hgetall('user:' + req.body.username, (err, user) => {
     if (user) {
       res.redirect('/users/dashboard/' + req.body.username + '?id=' + token);

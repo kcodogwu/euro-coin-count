@@ -131,3 +131,14 @@ div#result {
   border-color: #666;
   width: 100%;
 }
+
+.no-access {
+  color: red;
+  display: none;
+  visibility: hidden;
+}
+
+.no-access-visible{
+  display: block;
+  visibility: visible;
+}

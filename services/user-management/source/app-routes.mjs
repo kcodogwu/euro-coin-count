@@ -28,11 +28,12 @@ const appRouter = (app) => {
     <body>
       <div id="mySidenav" class="sidenav">
         <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-        <a href="#">Log out</a>
+        <a href="/log-out">Log out</a>
         <a href="/users/dashboard/${ l && l.username }?id=${ l && l.token }">My profile</a>
         <a href="/game/play/${ l && l.username }?id=${ l && l.token }">Play</a>
         <a href="/game/instructions/${ l && l.username }?id=${ l && l.token }">Instructions</a>
         <a href="/game/difficulty-level/${ l && l.username }?id=${ l && l.token }">Difficulty</a>
+        <a href="/leaderboard/index/${ l && l.username }?id=${ l && l.token }">Leaderboard</a>
       </div>
       <div id="page">
         <div id="wrapper">
@@ -105,7 +106,6 @@ const appRouter = (app) => {
     const username = body.username;
     const password = body.password;
     
-    
     credential().hash(password, (err, hash) => {
       if (err) { return; }
 
@@ -114,8 +114,7 @@ const appRouter = (app) => {
         'fullName', fullName, 
         'hash', hash,
         'difficultyLevel', 'Easy',
-        'score', 0,
-        'firstTry', 1
+        'score', 0
       );
 
       let token = jwt.sign({ payload: username }, 'creatures bits white next', { expiresIn: 86400 });
@@ -167,12 +166,9 @@ const appRouter = (app) => {
   };
 
   // GET
-  app.get('/users/sign-up', signUp);
   app.get('/sign-up', signUp);
-  app.get('/users/dashboard/:username', validateToken, dashboard);
   app.get('/dashboard/:username', validateToken, dashboard);
   //POST
-  app.post('/users/post-sign-up', postSignUp);
   app.post('/post-sign-up', postSignUp);
 };
 

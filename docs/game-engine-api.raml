@@ -1,0 +1,93 @@
+#%RAML 1.0
+---
+title: Game Engine
+baseUri: /game
+version: 1
+
+/instruction:
+  /{ username }:
+    get:
+      description: Retrieve page that shows a player (user) all the necessary information and guide on how to go about playing the game
+      queryParameters:
+        token:
+          type: string
+          description: JSON Web Token assigned to authorized user giving permission to make call
+          required: true
+      responses:
+        200:
+          body:
+            text/html:
+        403:
+          description: Refused response to call because no token is provided
+          body: 
+            text/plain:
+
+/difficulty-level:
+  /{ username }:
+    get:
+      description: Retrieve page to allow players (users) set the game difficulty level they are comfortable with
+      queryParameters:
+        token:
+          type: string
+          description: JSON Web Token assigned to authorized user giving permission to make call
+          required: true
+      responses:
+        200:
+          body:
+            text/html:
+        403:
+          description: Refused response to call because no token is provided
+          body: 
+            text/plain:
+
+/post-difficulty-level:
+  post:
+    description: Modifies the game difficulty level to reflect the player's choice
+    body:
+      application/x-www-form-urlencoded:
+        type: object
+        properties: 
+          difficultyLevel: string
+    responses: 
+      303:
+        description: Redirects to /game/difficulty-level/{ username }?token=ACCESS TOKEN
+
+/play:
+  /{ username }:
+    get:
+      description: Retrieve the page where a player (user) plays the game
+      queryParameters:
+        token:
+          type: string
+          description: JSON Web Token assigned to authorized user giving permission to make call
+          required: true
+      responses:
+        200:
+          body:
+            text/html:
+        403:
+          description: Refused response to call because no token is provided
+          body: 
+            text/plain:
+
+/post-play:
+  post:
+    description: Processes the answer supplied by the player and assigns the appropriate score
+    body:
+      application/x-www-form-urlencoded:
+        type: object
+        properties: 
+          coinLabel{N}: string
+          coinCount{N}: number
+        example: |
+          {
+            "coinLabel1": "€2",
+            "coinCount1": 3
+            "coinLabel2": "€1",
+            "coinCount2": 1
+            "coinLabel3": "2c",
+            "coinCount3": 1
+          }
+    responses: 
+      303:
+        description: Redirects to /game/play/{ username }?token=ACCESS TOKEN

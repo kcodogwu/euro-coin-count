@@ -62,19 +62,36 @@ window.onload = () => {
     const timesX = document.createTextNode('\n x \n');
     const removeButton = document.createElement('button');
 
-    ++i;
+    i=1;
+    
+    while (true) {
+      if (lib.select('[name = "coinLabel' + i + '"]')) {
+        ++i;
+      } else {
+        break;
+      }
+    }
+
     lib.addClass(resultChildDiv, 'result-child');
     countCoinsInput.setAttribute('type', 'number');
     countCoinsInput.setAttribute('name', 'coinCount' + i);
     coinLabelSelect.setAttribute('name', 'coinLabel' + i);
     e2Option.setAttribute('value', '€2');
+    e2Option.innerHTML = '€2';
     e1Option.setAttribute('value', '€1');
+    e1Option.innerHTML = '€1';
     c50Option.setAttribute('value', '50c');
+    c50Option.innerHTML = '50c';
     c20Option.setAttribute('value', '20c');
+    c20Option.innerHTML = '20c';
     c10Option.setAttribute('value', '10c');
+    c10Option.innerHTML = '10c';
     c5Option.setAttribute('value', '5c');
+    c5Option.innerHTML = '5c';
     c2Option.setAttribute('value', '2c');
+    c2Option.innerHTML = '2c';
     c1Option.setAttribute('value', '1c');
+    c1Option.innerHTML = '1c';
     removeButton.setAttribute('class', 'remove');
     removeButton.innerText = '-';
     coinLabelSelect.appendChild(e2Option);
